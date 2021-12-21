@@ -1,0 +1,40 @@
+<h1>Listing Posts</h1>
+
+<.modal return_to={Routes.post_index_path(@socket, :index)}>
+  <.live_component
+    module={ClickAwayWeb.PostLive.FormComponent}
+    id={:new}
+    title={@page_title}
+    action={@live_action}
+    post={@post}
+    return_to={Routes.post_index_path(@socket, :index)}
+  />
+</.modal>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="posts">
+    <%= for post <- @posts do %>
+      <tr id={"post-#{post.id}"}>
+        <td><%= post.title %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.post_show_path(@socket, :show, post) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: post.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= link "random click event", to: "#", phx_click: "foo" %></span>
+<br />
+<span><%= live_patch "New Post (patch)", to: Routes.post_index_path(@socket, :new) %></span>
+<br />
+<span><%= link "New Post (LiveView.JS)", to: "#", phx_click: JS.show(to: "#modal") %></span>
